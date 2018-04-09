@@ -1,19 +1,16 @@
 /**
- * Wire
- * Copyright (C) 2018 Wire Swiss GmbH
+ * Wire Copyright (C) 2018 Wire Swiss GmbH
  *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ * <p>This program is free software: you can redistribute it and/or modify it under the terms of the
+ * GNU General Public License as published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * <p>This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
+ * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * <p>You should have received a copy of the GNU General Public License along with this program. If
+ * not, see <http://www.gnu.org/licenses/>.
  */
 /*
  * This part of the Wire sofware is based on the work of Robert Penner.
@@ -55,61 +52,49 @@ import android.view.animation.Interpolator;
 
 public final class Linear {
 
-    private Linear() {}
+  private Linear() {}
 
-    public static class EaseIn implements Interpolator {
+  public static class EaseIn implements Interpolator {
 
-        /**
-         * Easing equation function for a simple linear tweening, with no easing.
-         */
-        public EaseIn() {
-        }
+    /** Easing equation function for a simple linear tweening, with no easing. */
+    public EaseIn() {}
 
-        @Override
-        public float getInterpolation(float t) {
-            return t;
-        }
+    @Override
+    public float getInterpolation(float t) {
+      return t;
     }
+  }
 
-    public static class EaseOut implements Interpolator {
+  public static class EaseOut implements Interpolator {
 
-        /**
-         * Easing equation function for a simple linear tweening, with no easing.
-         */
-        public EaseOut() {
-        }
+    /** Easing equation function for a simple linear tweening, with no easing. */
+    public EaseOut() {}
 
-        @Override
-        public float getInterpolation(float t) {
-            return t;
-        }
+    @Override
+    public float getInterpolation(float t) {
+      return t;
     }
+  }
 
-    public static class EaseInOut implements Interpolator {
+  public static class EaseInOut implements Interpolator {
 
-        /**
-         * Easing equation function for a simple linear tweening, with no easing.
-         */
-        public EaseInOut() {
-        }
+    /** Easing equation function for a simple linear tweening, with no easing. */
+    public EaseInOut() {}
 
-        @Override
-        public float getInterpolation(float t) {
-            return t;
-        }
+    @Override
+    public float getInterpolation(float t) {
+      return t;
     }
+  }
 
-    public static class EaseOutIn implements Interpolator {
+  public static class EaseOutIn implements Interpolator {
 
-        /**
-         * Easing equation function for a simple linear tweening, with no easing.
-         */
-        public EaseOutIn() {
-        }
+    /** Easing equation function for a simple linear tweening, with no easing. */
+    public EaseOutIn() {}
 
-        @Override
-        public float getInterpolation(float t) {
-            return t;
-        }
+    @Override
+    public float getInterpolation(float t) {
+      return t;
     }
+  }
 }

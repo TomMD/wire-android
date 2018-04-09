@@ -119,7 +119,7 @@ lazy val app = Project("zclient-app", file("app"))
     apkDebugSigningConfig := SigningConfig.Debug,
     transitiveAndroidLibs := true,
     dexMaxHeap := "6144M",
-    minSdkVersion := "17",
+    minSdkVersion := "21",
     libraryDependencies ++= Seq (multidex, supportannotations, supportdesign, audioNotifications, cardview,
       nineoldandroids, localytics, psBase, psGcm, psMaps, psLocation, mp4parser,
       "com.jakewharton.hugo" % "hugo-annotations" % "1.2.1" % "provided",

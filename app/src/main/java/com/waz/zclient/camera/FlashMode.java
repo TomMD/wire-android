@@ -1,19 +1,16 @@
 /**
- * Wire
- * Copyright (C) 2018 Wire Swiss GmbH
+ * Wire Copyright (C) 2018 Wire Swiss GmbH
  *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ * <p>This program is free software: you can redistribute it and/or modify it under the terms of the
+ * GNU General Public License as published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * <p>This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
+ * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * <p>You should have received a copy of the GNU General Public License along with this program. If
+ * not, see <http://www.gnu.org/licenses/>.
  */
 package com.waz.zclient.camera;
 
@@ -22,33 +19,33 @@ import android.text.TextUtils;
 
 public enum FlashMode {
 
-    /*
-        off, auto, on, torch, red-eye
-     */
-    OFF(Camera.Parameters.FLASH_MODE_OFF),
-    AUTO(Camera.Parameters.FLASH_MODE_AUTO),
-    ON(Camera.Parameters.FLASH_MODE_ON),
-    RED_EYE(Camera.Parameters.FLASH_MODE_RED_EYE),
-    TORCH(Camera.Parameters.FLASH_MODE_TORCH);
+  /*
+     off, auto, on, torch, red-eye
+  */
+  OFF(Camera.Parameters.FLASH_MODE_OFF),
+  AUTO(Camera.Parameters.FLASH_MODE_AUTO),
+  ON(Camera.Parameters.FLASH_MODE_ON),
+  RED_EYE(Camera.Parameters.FLASH_MODE_RED_EYE),
+  TORCH(Camera.Parameters.FLASH_MODE_TORCH);
 
-    public String mode;
+  public String mode;
 
-    FlashMode(String mode) {
-        this.mode = mode;
+  FlashMode(String mode) {
+    this.mode = mode;
+  }
+
+  public static FlashMode get(String mode) {
+    if (TextUtils.isEmpty(mode)) {
+      return OFF;
     }
 
-    public static FlashMode get(String mode) {
-        if (TextUtils.isEmpty(mode)) {
-            return OFF;
-        }
-
-        for (int i = 0; i < FlashMode.values().length; i++) {
-            FlashMode state = FlashMode.values()[i];
-            if (mode.equals(state.mode)) {
-                return state;
-            }
-        }
-
-        return OFF;
+    for (int i = 0; i < FlashMode.values().length; i++) {
+      FlashMode state = FlashMode.values()[i];
+      if (mode.equals(state.mode)) {
+        return state;
+      }
     }
+
+    return OFF;
+  }
 }
