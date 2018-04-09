@@ -1,19 +1,16 @@
 /**
- * Wire
- * Copyright (C) 2018 Wire Swiss GmbH
+ * Wire Copyright (C) 2018 Wire Swiss GmbH
  *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ * <p>This program is free software: you can redistribute it and/or modify it under the terms of the
+ * GNU General Public License as published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * <p>This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
+ * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * <p>You should have received a copy of the GNU General Public License along with this program. If
+ * not, see <http://www.gnu.org/licenses/>.
  */
 package com.waz.zclient.ui.calling;
 
@@ -27,47 +24,50 @@ import com.waz.zclient.ui.R;
 import com.waz.zclient.utils.ViewUtils;
 
 public class CallControlCameraToggleButtonView extends FrameLayout {
-    private TextView cameraIcon;
-    private int flipAnimationDuration;
+  private TextView cameraIcon;
+  private int flipAnimationDuration;
 
-    private boolean flipped = false;
+  private boolean flipped = false;
 
-    public CallControlCameraToggleButtonView(Context context) {
-        this(context, null);
+  public CallControlCameraToggleButtonView(Context context) {
+    this(context, null);
+  }
+
+  public CallControlCameraToggleButtonView(Context context, AttributeSet attrs) {
+    this(context, attrs, 0);
+  }
+
+  public CallControlCameraToggleButtonView(Context context, AttributeSet attrs, int defStyleAttr) {
+    super(context, attrs, defStyleAttr);
+    init();
+  }
+
+  public boolean isFlipped() {
+    return flipped;
+  }
+
+  public void setFlipped(boolean flipped) {
+    if (flipped == this.flipped) {
+      return;
     }
+    this.flipped = flipped;
+    cameraIcon
+        .animate()
+        .rotationYBy(180f)
+        .rotationXBy(180f)
+        .setDuration(flipAnimationDuration)
+        .start();
+  }
 
-    public CallControlCameraToggleButtonView(Context context, AttributeSet attrs) {
-        this(context, attrs, 0);
-    }
+  private void init() {
+    LayoutInflater.from(getContext())
+        .inflate(R.layout.calling__controls__camera_toggle_button, this, true);
 
-    public CallControlCameraToggleButtonView(Context context, AttributeSet attrs, int defStyleAttr) {
-        super(context, attrs, defStyleAttr);
-        init();
-    }
+    cameraIcon = ViewUtils.getView(this, R.id.gtv__calling_controls__ongoing_camera);
+    cameraIcon.setTextColor(
+        ContextCompat.getColorStateList(
+            getContext(), R.color.selector__icon_button__text_color__dark));
 
-    public boolean isFlipped() {
-        return flipped;
-    }
-
-    public void setFlipped(boolean flipped) {
-        if (flipped == this.flipped) {
-            return;
-        }
-        this.flipped = flipped;
-        cameraIcon.animate()
-                  .rotationYBy(180f)
-                  .rotationXBy(180f)
-                  .setDuration(flipAnimationDuration)
-                  .start();
-    }
-
-    private void init() {
-        LayoutInflater.from(getContext()).inflate(R.layout.calling__controls__camera_toggle_button, this, true);
-
-        cameraIcon =  ViewUtils.getView(this, R.id.gtv__calling_controls__ongoing_camera);
-        cameraIcon.setTextColor(ContextCompat.getColorStateList(getContext(),
-                                                                R.color.selector__icon_button__text_color__dark));
-
-        flipAnimationDuration = getResources().getInteger(R.integer.animation_duration_medium);
-    }
+    flipAnimationDuration = getResources().getInteger(R.integer.animation_duration_medium);
+  }
 }
