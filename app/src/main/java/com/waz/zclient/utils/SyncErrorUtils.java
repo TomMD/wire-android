@@ -24,36 +24,42 @@ import com.waz.zclient.R;
 
 public class SyncErrorUtils {
 
-    public static String getGroupErrorMessage(Context context, ErrorsList.ErrorDescription error) {
-        if (context == null || error == null) {
-            return "";
-        }
-        switch (error.getType()) {
-            case CANNOT_ADD_UNCONNECTED_USER_TO_CONVERSATION:
-                int userCount = getIteratorSize(error.getUsers());
-                if (userCount == 1) {
-                    return context.getResources().getString(R.string.in_app_notification__sync_error__add_user__body,
-                                                    error.getUsers().iterator().next().getName());
-                } else {
-                    return context.getString(R.string.in_app_notification__sync_error__add_multiple_user__body);
-                }
-            case CANNOT_CREATE_GROUP_CONVERSATION_WITH_UNCONNECTED_USER:
-                return context.getResources().getString(R.string.in_app_notification__sync_error__create_group_convo__body,
-                                                error.getConversation().getName());
-            default:
-                return context.getString(R.string.in_app_notification__sync_error__unknown__body);
-        }
+  public static String getGroupErrorMessage(Context context, ErrorsList.ErrorDescription error) {
+    if (context == null || error == null) {
+      return "";
     }
-
-    private static int getIteratorSize(Iterable iterable) {
-        if (iterable == null) {
-            return 0;
+    switch (error.getType()) {
+      case CANNOT_ADD_UNCONNECTED_USER_TO_CONVERSATION:
+        int userCount = getIteratorSize(error.getUsers());
+        if (userCount == 1) {
+          return context
+              .getResources()
+              .getString(
+                  R.string.in_app_notification__sync_error__add_user__body,
+                  error.getUsers().iterator().next().getName());
+        } else {
+          return context.getString(
+              R.string.in_app_notification__sync_error__add_multiple_user__body);
         }
-        int size = 0;
-        for (Object ignored : iterable) {
-            size++;
-        }
-        return size;
+      case CANNOT_CREATE_GROUP_CONVERSATION_WITH_UNCONNECTED_USER:
+        return context
+            .getResources()
+            .getString(
+                R.string.in_app_notification__sync_error__create_group_convo__body,
+                error.getConversation().getName());
+      default:
+        return context.getString(R.string.in_app_notification__sync_error__unknown__body);
     }
+  }
 
+  private static int getIteratorSize(Iterable iterable) {
+    if (iterable == null) {
+      return 0;
+    }
+    int size = 0;
+    for (Object ignored : iterable) {
+      size++;
+    }
+    return size;
+  }
 }
