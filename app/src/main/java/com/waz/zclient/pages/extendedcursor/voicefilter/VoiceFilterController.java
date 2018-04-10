@@ -1,19 +1,16 @@
 /**
- * Wire
- * Copyright (C) 2018 Wire Swiss GmbH
+ * Wire Copyright (C) 2018 Wire Swiss GmbH
  *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ * <p>This program is free software: you can redistribute it and/or modify it under the terms of the
+ * GNU General Public License as published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * <p>This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
+ * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * <p>You should have received a copy of the GNU General Public License along with this program. If
+ * not, see <http://www.gnu.org/licenses/>.
  */
 package com.waz.zclient.pages.extendedcursor.voicefilter;
 
@@ -26,221 +23,220 @@ import com.waz.api.AudioOverview;
 import com.waz.api.PlaybackControls;
 import com.waz.api.RecordingCallback;
 import com.waz.api.RecordingControls;
-import org.threeten.bp.Instant;
-
 import java.util.ArrayList;
 import java.util.List;
+import org.threeten.bp.Instant;
 
+public class VoiceFilterController
+    implements RecordingCallback, Asset.LoadCallback<AudioAssetForUpload> {
+  private static final long UPDATE_PLAY_TIME = 40;
 
-public class VoiceFilterController implements
-                                   RecordingCallback,
-                                   Asset.LoadCallback<AudioAssetForUpload> {
-    private static final long UPDATE_PLAY_TIME = 40;
+  public List<RecordingObserver> recordingObservers = new ArrayList<>();
+  public List<PlaybackObserver> playbackObservers = new ArrayList<>();
 
-    public List<RecordingObserver> recordingObservers = new ArrayList<>();
-    public List<PlaybackObserver> playbackObservers = new ArrayList<>();
+  private RecordingControls recordingControl;
+  private AudioAssetForUpload audioAssetForUpload;
+  private PlaybackControls currentPlayBackControl;
+  private AudioOverview overview;
 
-    private RecordingControls recordingControl;
-    private AudioAssetForUpload audioAssetForUpload;
-    private PlaybackControls currentPlayBackControl;
-    private AudioOverview overview;
+  private Handler handler = new Handler();
+  private AudioAssetForUpload originalRecording;
+  private AudioEffect appliedAudioEffect;
 
-    private Handler handler = new Handler();
-    private AudioAssetForUpload originalRecording;
-    private AudioEffect appliedAudioEffect;
+  public void addObserver(RecordingObserver recordingObserver) {
+    recordingObservers.remove(recordingObserver);
+    recordingObservers.add(recordingObserver);
+  }
 
-    public void addObserver(RecordingObserver recordingObserver) {
-        recordingObservers.remove(recordingObserver);
-        recordingObservers.add(recordingObserver);
+  public void removeObserver(RecordingObserver recordingObserver) {
+    recordingObservers.remove(recordingObserver);
+  }
+
+  public void addPlaybackObserver(PlaybackObserver observer) {
+    playbackObservers.remove(observer);
+    playbackObservers.add(observer);
+  }
+
+  public void tearDown() {
+    stopRecording();
+    stopPlayback();
+    if (audioAssetForUpload != null) {
+      audioAssetForUpload.delete();
     }
 
-    public void removeObserver(RecordingObserver recordingObserver) {
-        recordingObservers.remove(recordingObserver);
+    if (originalRecording != null) {
+      originalRecording.delete();
     }
 
-    public void addPlaybackObserver(PlaybackObserver observer) {
-        playbackObservers.remove(observer);
-        playbackObservers.add(observer);
+    handler.removeCallbacks(player);
+  }
+
+  public void startRecording() {
+    if (recordingControl == null) {
+      recordingControl = AssetFactory.recordAudioAsset(this);
+    }
+  }
+
+  public void stopRecording() {
+    if (recordingControl != null) {
+      recordingControl.stop();
+      recordingControl = null;
+    }
+  }
+
+  public void stopPlayback() {
+    if (currentPlayBackControl != null) {
+      handler.removeCallbacks(player);
+      currentPlayBackControl.stop();
+      currentPlayBackControl = null;
+    }
+  }
+
+  @Override
+  public void onStart(Instant timestamp) {
+    for (RecordingObserver recordingObserver : recordingObservers) {
+      recordingObserver.onRecordingStarted(recordingControl, timestamp);
+    }
+  }
+
+  @Override
+  public void onComplete(
+      AudioAssetForUpload recording, boolean fileSizeLimitReached, AudioOverview overview) {
+    recordingControl = null;
+    appliedAudioEffect = null;
+    originalRecording = recording;
+    this.overview = overview;
+    for (RecordingObserver recordingObserver : recordingObservers) {
+      recordingObserver.onRecordingFinished(recording, fileSizeLimitReached, overview);
+    }
+  }
+
+  @Override
+  public void onCancel() {
+    for (RecordingObserver recordingObserver : recordingObservers) {
+      recordingObserver.onRecordingCanceled();
+    }
+  }
+
+  public void quit() {
+    tearDown();
+  }
+
+  public void approveAudio() {
+    if (audioAssetForUpload == null) {
+      originalRecording.applyEffect(
+          AudioEffect.NONE,
+          new Asset.LoadCallback<AudioAssetForUpload>() {
+
+            @Override
+            public void onLoaded(AudioAssetForUpload audioAssetForUpload) {
+              VoiceFilterController.this.audioAssetForUpload = audioAssetForUpload;
+              approveAudio();
+            }
+
+            @Override
+            public void onLoadFailed() {
+              VoiceFilterController.this.audioAssetForUpload = originalRecording;
+              approveAudio();
+            }
+          });
+
+      return;
     }
 
-    public void tearDown() {
-        stopRecording();
-        stopPlayback();
-        if (audioAssetForUpload != null) {
-            audioAssetForUpload.delete();
-        }
+    AudioAssetForUpload sendAudio = audioAssetForUpload;
+    /*
+       Null it to make it is not deleted during tearDown()...
+    */
+    audioAssetForUpload = null;
 
-        if (originalRecording != null) {
-            originalRecording.delete();
-        }
+    for (RecordingObserver recordingObserver : recordingObservers) {
+      recordingObserver.sendRecording(sendAudio, appliedAudioEffect);
+    }
+  }
 
-        handler.removeCallbacks(player);
+  public void onReRecord() {
+    for (RecordingObserver recordingObserver : recordingObservers) {
+      recordingObserver.onReRecord();
     }
 
-    public void startRecording() {
-        if (recordingControl == null) {
-            recordingControl = AssetFactory.recordAudioAsset(this);
-        }
-    }
+    stopPlayback();
+  }
 
-    public void stopRecording() {
-        if (recordingControl != null) {
-            recordingControl.stop();
-            recordingControl = null;
-        }
-    }
+  private void update() {
+    handler.postDelayed(player, UPDATE_PLAY_TIME);
+  }
 
-    public void stopPlayback() {
-        if (currentPlayBackControl != null) {
-            handler.removeCallbacks(player);
-            currentPlayBackControl.stop();
-            currentPlayBackControl = null;
-        }
-    }
-
-    @Override
-    public void onStart(Instant timestamp) {
-        for (RecordingObserver recordingObserver : recordingObservers) {
-            recordingObserver.onRecordingStarted(recordingControl, timestamp);
-        }
-    }
-
-    @Override
-    public void onComplete(AudioAssetForUpload recording, boolean fileSizeLimitReached, AudioOverview overview) {
-        recordingControl = null;
-        appliedAudioEffect = null;
-        originalRecording = recording;
-        this.overview = overview;
-        for (RecordingObserver recordingObserver : recordingObservers) {
-            recordingObserver.onRecordingFinished(recording, fileSizeLimitReached, overview);
-        }
-    }
-
-    @Override
-    public void onCancel() {
-        for (RecordingObserver recordingObserver : recordingObservers) {
-            recordingObserver.onRecordingCanceled();
-        }
-    }
-
-    public void quit() {
-        tearDown();
-    }
-
-    public void approveAudio() {
-        if (audioAssetForUpload == null) {
-            originalRecording.applyEffect(AudioEffect.NONE, new Asset.LoadCallback<AudioAssetForUpload>() {
-
-                @Override
-                public void onLoaded(AudioAssetForUpload audioAssetForUpload) {
-                    VoiceFilterController.this.audioAssetForUpload = audioAssetForUpload;
-                    approveAudio();
-                }
-
-                @Override
-                public void onLoadFailed() {
-                    VoiceFilterController.this.audioAssetForUpload = originalRecording;
-                    approveAudio();
-                }
-            });
-
-            return;
-        }
-
-        AudioAssetForUpload sendAudio = audioAssetForUpload;
-        /*
-            Null it to make it is not deleted during tearDown()...
-         */
-        audioAssetForUpload = null;
-
-        for (RecordingObserver recordingObserver : recordingObservers) {
-            recordingObserver.sendRecording(sendAudio, appliedAudioEffect);
-        }
-    }
-
-    public void onReRecord() {
-        for (RecordingObserver recordingObserver : recordingObservers) {
-            recordingObserver.onReRecord();
-        }
-
-        stopPlayback();
-    }
-
-    private void update() {
-        handler.postDelayed(player, UPDATE_PLAY_TIME);
-    }
-
-    private Runnable player = new Runnable() {
+  private Runnable player =
+      new Runnable() {
         @Override
         public void run() {
 
-            if (!currentPlayBackControl.isPlaying()) {
-                for (PlaybackObserver observer : playbackObservers) {
-                    observer.onPlaybackStopped(currentPlayBackControl.getDuration().getSeconds());
-                }
-                return;
-            }
-
+          if (!currentPlayBackControl.isPlaying()) {
             for (PlaybackObserver observer : playbackObservers) {
-                long current = currentPlayBackControl.getPlayhead().toMillis();
-                observer.onPlaybackProceeded(current, currentPlayBackControl.getDuration().toMillis());
+              observer.onPlaybackStopped(currentPlayBackControl.getDuration().getSeconds());
             }
+            return;
+          }
 
-            update();
+          for (PlaybackObserver observer : playbackObservers) {
+            long current = currentPlayBackControl.getPlayhead().toMillis();
+            observer.onPlaybackProceeded(current, currentPlayBackControl.getDuration().toMillis());
+          }
+
+          update();
         }
-    };
+      };
 
-    public void applyEffectAndPlay(AudioEffect audioEffect) {
-        originalRecording.applyEffect(audioEffect, this);
-        appliedAudioEffect = audioEffect;
+  public void applyEffectAndPlay(AudioEffect audioEffect) {
+    originalRecording.applyEffect(audioEffect, this);
+    appliedAudioEffect = audioEffect;
+  }
+
+  @Override
+  public void onLoaded(AudioAssetForUpload audioAssetForUpload) {
+    handler.removeCallbacks(player);
+
+    if (currentPlayBackControl != null && currentPlayBackControl.isPlaying()) {
+      currentPlayBackControl.stop();
     }
 
-    @Override
-    public void onLoaded(AudioAssetForUpload audioAssetForUpload) {
-        handler.removeCallbacks(player);
-
-        if (currentPlayBackControl != null && currentPlayBackControl.isPlaying()) {
-            currentPlayBackControl.stop();
-        }
-
-        if (this.audioAssetForUpload != null) {
-            this.audioAssetForUpload.delete();
-        }
-
-        this.audioAssetForUpload = audioAssetForUpload;
-
-        currentPlayBackControl = audioAssetForUpload.getPlaybackControls();
-        currentPlayBackControl.play();
-        for (PlaybackObserver observer : playbackObservers) {
-            observer.onPlaybackStarted(overview);
-        }
-
-        update();
+    if (this.audioAssetForUpload != null) {
+      this.audioAssetForUpload.delete();
     }
 
-    @Override
-    public void onLoadFailed() {
+    this.audioAssetForUpload = audioAssetForUpload;
 
+    currentPlayBackControl = audioAssetForUpload.getPlaybackControls();
+    currentPlayBackControl.play();
+    for (PlaybackObserver observer : playbackObservers) {
+      observer.onPlaybackStarted(overview);
     }
 
+    update();
+  }
 
-    public interface RecordingObserver {
-        void onRecordingStarted(RecordingControls recording, Instant timestamp);
+  @Override
+  public void onLoadFailed() {}
 
-        void onRecordingFinished(AudioAssetForUpload recording, boolean fileSizeLimitReached, AudioOverview overview);
+  public interface RecordingObserver {
+    void onRecordingStarted(RecordingControls recording, Instant timestamp);
 
-        void onRecordingCanceled();
+    void onRecordingFinished(
+        AudioAssetForUpload recording, boolean fileSizeLimitReached, AudioOverview overview);
 
-        void onReRecord();
+    void onRecordingCanceled();
 
-        void sendRecording(AudioAssetForUpload audioAssetForUpload, AudioEffect appliedAudioEffect);
-    }
+    void onReRecord();
 
-    public interface PlaybackObserver {
-        void onPlaybackStopped(long seconds);
+    void sendRecording(AudioAssetForUpload audioAssetForUpload, AudioEffect appliedAudioEffect);
+  }
 
-        void onPlaybackStarted(AudioOverview overview);
+  public interface PlaybackObserver {
+    void onPlaybackStopped(long seconds);
 
-        void onPlaybackProceeded(long current, long total);
-    }
+    void onPlaybackStarted(AudioOverview overview);
+
+    void onPlaybackProceeded(long current, long total);
+  }
 }
