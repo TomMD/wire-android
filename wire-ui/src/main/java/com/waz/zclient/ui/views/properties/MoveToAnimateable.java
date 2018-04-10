@@ -1,19 +1,16 @@
 /**
- * Wire
- * Copyright (C) 2018 Wire Swiss GmbH
+ * Wire Copyright (C) 2018 Wire Swiss GmbH
  *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ * <p>This program is free software: you can redistribute it and/or modify it under the terms of the
+ * GNU General Public License as published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * <p>This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
+ * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * <p>You should have received a copy of the GNU General Public License along with this program. If
+ * not, see <http://www.gnu.org/licenses/>.
  */
 package com.waz.zclient.ui.views.properties;
 
@@ -21,19 +18,20 @@ import android.util.Property;
 
 public interface MoveToAnimateable {
 
-    Property<MoveToAnimateable, Float> MOVE_TO = new Property<MoveToAnimateable, Float>(Float.class, "moveTo") {
+  Property<MoveToAnimateable, Float> MOVE_TO =
+      new Property<MoveToAnimateable, Float>(Float.class, "moveTo") {
         @Override
         public Float get(MoveToAnimateable object) {
-            return object.getMoveTo();
+          return object.getMoveTo();
         }
 
         @Override
         public void set(MoveToAnimateable object, Float value) {
-            object.setMoveTo(value);
+          object.setMoveTo(value);
         }
-    };
+      };
 
-    float getMoveTo();
+  float getMoveTo();
 
-    void setMoveTo(float value);
+  void setMoveTo(float value);
 }
