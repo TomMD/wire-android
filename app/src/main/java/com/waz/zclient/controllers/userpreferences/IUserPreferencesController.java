@@ -1,74 +1,68 @@
 /**
- * Wire
- * Copyright (C) 2018 Wire Swiss GmbH
+ * Wire Copyright (C) 2018 Wire Swiss GmbH
  *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ * <p>This program is free software: you can redistribute it and/or modify it under the terms of the
+ * GNU General Public License as published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * <p>This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
+ * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * <p>You should have received a copy of the GNU General Public License along with this program. If
+ * not, see <http://www.gnu.org/licenses/>.
  */
 package com.waz.zclient.controllers.userpreferences;
 
 import android.support.annotation.IntDef;
-
 import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
 public interface IUserPreferencesController {
 
-    @IntDef({SEND_LOCATION_MESSAGE,
-             LIKED_MESSAGE,
-             DO_NOT_SHOW_SHARE_CONTACTS_DIALOG})
-    @interface Action { }
-    int SEND_LOCATION_MESSAGE = 0;
-    int LIKED_MESSAGE = 1;
-    int DO_NOT_SHOW_SHARE_CONTACTS_DIALOG = 2;
+  @IntDef({SEND_LOCATION_MESSAGE, LIKED_MESSAGE, DO_NOT_SHOW_SHARE_CONTACTS_DIALOG})
+  @interface Action {}
 
-    void tearDown();
+  int SEND_LOCATION_MESSAGE = 0;
+  int LIKED_MESSAGE = 1;
+  int DO_NOT_SHOW_SHARE_CONTACTS_DIALOG = 2;
 
-    void reset();
+  void tearDown();
 
-    void setLastAccentColor(final int accentColor);
+  void reset();
 
-    int getLastAccentColor();
+  void setLastAccentColor(final int accentColor);
 
-    boolean showContactsDialog();
+  int getLastAccentColor();
 
-    String getDeviceId();
+  boolean showContactsDialog();
 
-    void setVerificationCode(String code);
+  String getDeviceId();
 
-    void removeVerificationCode();
+  void setVerificationCode(String code);
 
-    String getVerificationCode();
+  void removeVerificationCode();
 
-    boolean hasVerificationCode();
+  String getVerificationCode();
 
-    void setPerformedAction(@Action int action);
+  boolean hasVerificationCode();
 
-    boolean hasPerformedAction(@Action int action);
+  void setPerformedAction(@Action int action);
 
-    void addRecentEmoji(String emoji);
+  boolean hasPerformedAction(@Action int action);
 
-    List<String> getRecentEmojis();
+  void addRecentEmoji(String emoji);
 
-    void setUnsupportedEmoji(Collection<String> emoji, int version);
+  List<String> getRecentEmojis();
 
-    Set<String> getUnsupportedEmojis();
+  void setUnsupportedEmoji(Collection<String> emoji, int version);
 
-    boolean hasCheckedForUnsupportedEmojis(int version);
+  Set<String> getUnsupportedEmojis();
 
-    long getLastEphemeralValue();
+  boolean hasCheckedForUnsupportedEmojis(int version);
 
-    void setLastEphemeralValue(long value);
+  long getLastEphemeralValue();
 
+  void setLastEphemeralValue(long value);
 }
