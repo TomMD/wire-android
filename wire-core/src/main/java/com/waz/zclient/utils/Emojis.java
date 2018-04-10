@@ -1,24 +1,20 @@
 /**
- * Wire
- * Copyright (C) 2018 Wire Swiss GmbH
+ * Wire Copyright (C) 2018 Wire Swiss GmbH
  *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ * <p>This program is free software: you can redistribute it and/or modify it under the terms of the
+ * GNU General Public License as published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * <p>This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
+ * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * <p>You should have received a copy of the GNU General Public License along with this program. If
+ * not, see <http://www.gnu.org/licenses/>.
  */
 package com.waz.zclient.utils;
 
 import com.waz.zclient.core.R;
-
 import java.util.LinkedList;
 import java.util.List;
 
@@ -26,45 +22,44 @@ import java.util.List;
  * There seems to be an issue with decoding XML with emojis on some devices
  * https://code.google.com/p/android/issues/detail?id=81341
  *
- * Emojis fetched from
- * http://unicode.org/emoji/charts/full-emoji-list.html
+ * <p>Emojis fetched from http://unicode.org/emoji/charts/full-emoji-list.html
  * http://unicode.org/emoji/charts/emoji-ordering.html
  *
- * Converted to using unicode escapes with command
- * native2ascii -encoding utf8 input.txt output.txt
- *
+ * <p>Converted to using unicode escapes with command native2ascii -encoding utf8 input.txt
+ * output.txt
  */
 public class Emojis {
 
-    public static List<String[]> getAllEmojisSortedByCategory() {
-        List<String[]> all = new LinkedList<>();
-        all.add(PEOPLE);
-        all.add(NATURE);
-        all.add(FOOD_AND_DRINK);
-        all.add(ACTIVITY);
-        all.add(TRAVEL_AND_PLACES);
-        all.add(OBJECTS);
-        all.add(SYMBOLS);
-        all.add(FLAGS);
-        return all;
-    }
+  public static List<String[]> getAllEmojisSortedByCategory() {
+    List<String[]> all = new LinkedList<>();
+    all.add(PEOPLE);
+    all.add(NATURE);
+    all.add(FOOD_AND_DRINK);
+    all.add(ACTIVITY);
+    all.add(TRAVEL_AND_PLACES);
+    all.add(OBJECTS);
+    all.add(SYMBOLS);
+    all.add(FLAGS);
+    return all;
+  }
 
-    public static final int[] EMOJI_KEYBOARD_TAB_LABELS = {
-        R.string.glyph__clock,
-        R.string.glyph__emoji,
-        R.string.glyph__emoji_flower,
-        R.string.glyph__emoji_cake,
-        R.string.glyph__emoji_car,
-        R.string.glyph__emoji_ball,
-        R.string.glyph__emoji_crown,
-        R.string.glyph__emoji_symbol,
-        R.string.glyph__emoji_flag,
-        R.string.glyph__backspace
-    };
+  public static final int[] EMOJI_KEYBOARD_TAB_LABELS = {
+    R.string.glyph__clock,
+    R.string.glyph__emoji,
+    R.string.glyph__emoji_flower,
+    R.string.glyph__emoji_cake,
+    R.string.glyph__emoji_car,
+    R.string.glyph__emoji_ball,
+    R.string.glyph__emoji_crown,
+    R.string.glyph__emoji_symbol,
+    R.string.glyph__emoji_flag,
+    R.string.glyph__backspace
+  };
 
-    public static final int VERSION = 2;
+  public static final int VERSION = 2;
 
-    public static final String[] ACTIVITY = new String[] {
+  public static final String[] ACTIVITY =
+      new String[] {
         "\ud83d\udc7e", // Alien Monster
         "\ud83d\udd74", // Man in Business Suit Levitating
         "\ud83c\udfaa", // Circus Tent
@@ -117,9 +112,10 @@ public class Emojis {
         "\ud83c\udfbb", // Violin
         "\ud83c\udfac", // Clapper Board
         "\ud83c\udff9" // Bow and Arrow
-    };
+      };
 
-    public static final String[] FLAGS = new String[] {
+  public static final String[] FLAGS =
+      new String[] {
         "\ud83c\udde6\ud83c\udde8", // Flag for Ascension Island
         "\ud83c\udde6\ud83c\udde9", // Flag for Andorra
         "\ud83c\udde6\ud83c\uddea", // Flag for United Arab Emirates
@@ -380,9 +376,10 @@ public class Emojis {
         "\ud83c\uddfd\ud83c\uddea", // Flag for England
         "\ud83c\uddfd\ud83c\uddf8", // Flag for Scotland
         "\ud83c\uddfd\ud83c\uddfc" // Flag for Wales
-    };
+      };
 
-    public static final String[] FOOD_AND_DRINK = new String[] {
+  public static final String[] FOOD_AND_DRINK =
+      new String[] {
         "\ud83c\udf47", // Grapes
         "\ud83c\udf48", // Melon
         "\ud83c\udf49", // Watermelon
@@ -452,9 +449,10 @@ public class Emojis {
         "\ud83c\udf7b", // Clinking Beer Mugs
         "\ud83c\udf7d", // Fork and Knife With Plate
         "\ud83c\udf74" // Fork and Knife
-    };
+      };
 
-    public static final String[] NATURE = new String[] {
+  public static final String[] NATURE =
+      new String[] {
         "\ud83d\ude48", // See-No-Evil Monkey
         "\ud83d\ude49", // Hear-No-Evil Monkey
         "\ud83d\ude4a", // Speak-No-Evil Monkey
@@ -596,9 +594,10 @@ public class Emojis {
         "\ud83d\udd25", // Fire
         "\ud83d\udca7", // Droplet
         "\ud83c\udf0a" // Water Wave
-    };
+      };
 
-    public static final String[] OBJECTS = new String[] {
+  public static final String[] OBJECTS =
+      new String[] {
         "\u2620", // Skull and Crossbones
         "\ud83d\udc8c", // Love Letter
         "\ud83d\udca3", // Bomb
@@ -777,9 +776,10 @@ public class Emojis {
         "\ud83c\udff4", // Waving Black Flag
         "\ud83c\udff3", // Waving White Flag
         "\ud83c\udff3\ufe0f\u200d\ud83c\udf08" // Rainbow Flag
-    };
+      };
 
-    public static final String[] PEOPLE = new String[] {
+  public static final String[] PEOPLE =
+      new String[] {
         "\ud83d\ude00", // Grinning Face
         "\ud83d\ude01", // Grinning Face With Smiling Eyes
         "\ud83d\ude02", // Face With Tears of Joy
@@ -984,9 +984,10 @@ public class Emojis {
         "\ud83d\udc8d", // Ring
         "\ud83c\udf02", // Closed Umbrella
         "\ud83d\udcbc" // Briefcase
-    };
+      };
 
-    public static final String[] SYMBOLS = new String[] {
+  public static final String[] SYMBOLS =
+      new String[] {
         "\ud83d\udc41\u200d\ud83d\udde8", // Eye in Speech Bubble
         "\ud83d\udc98", // Heart With Arrow
         "\u2764", // Heavy Black Heart
@@ -1149,7 +1150,8 @@ public class Emojis {
         "\u26ce", // Ophiuchus
         "\ud83d\udd00", // Twisted Rightwards Arrows
         "\ud83d\udd01", // Clockwise Rightwards and Leftwards Open Circle Arrows
-        "\ud83d\udd02", // Clockwise Rightwards and Leftwards Open Circle Arrows With Circled One Overlay
+        "\ud83d\udd02", // Clockwise Rightwards and Leftwards Open Circle Arrows With Circled One
+                        // Overlay
         "\u25b6", // Black Right-Pointing Triangle
         "\u23e9", // Black Right-Pointing Double Triangle
         "\u25c0", // Black Left-Pointing Triangle
@@ -1238,9 +1240,10 @@ public class Emojis {
         "\u26ab", // Medium Black Circle
         "\ud83d\udd34", // Large Red Circle
         "\ud83d\udd35" // Large Blue Circle
-    };
+      };
 
-    public static final String[] TRAVEL_AND_PLACES = new String[] {
+  public static final String[] TRAVEL_AND_PLACES =
+      new String[] {
         "\ud83c\udfd4", // Snow Capped Mountain
         "\u26f0", // Mountain
         "\ud83c\udf0b", // Volcano
@@ -1355,6 +1358,5 @@ public class Emojis {
         "\ud83d\udec3", // Customs
         "\ud83d\udec4", // Baggage Claim
         "\ud83d\udec5" // Left Luggage
-    };
-
+      };
 }
